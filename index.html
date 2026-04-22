@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proposta Comercial · Home Projetos</title>
+
+  <!-- =============================================
+       FONTES: Playfair Display (display) + Plus Jakarta Sans (body)
+       ============================================= -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- TAILWIND CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Playfair Display"', 'serif'],
+            body:    ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* ============================================================
+       VARIÁVEIS GLOBAIS
+       ============================================================ */
+    :root {
+      --accent:       #2563EB;       /* azul principal             */
+      --accent-light: #DBEAFE;       /* azul claro (badges)        */
+      --gold:         #B45309;       /* dourado / destaque premium */
+      --gold-light:   #FEF3C7;
+      --surface:      rgba(255,255,255,0.65);
+      --border:       rgba(255,255,255,0.55);
+      --shadow:       0 8px 40px rgba(37,99,235,0.10);
+      --shadow-lg:    0 20px 60px rgba(37,99,235,0.18);
+      --transition:   0.35s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+
+    /* ============================================================
+       RESET & BASE
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      /* Fundo gradiente suave multi-camada */
+      background:
+        radial-gradient(ellipse 900px 600px at 10% 0%,   rgba(219,234,254,0.6) 0%, transparent 70%),
+        radial-gradient(ellipse 700px 500px at 90% 80%,  rgba(254,243,199,0.45) 0%, transparent 70%),
+        radial-gradient(ellipse 600px 400px at 50% 50%,  rgba(236,252,252,0.35) 0%, transparent 70%),
+        #F8FAFF;
+      background-attachment: fixed;
+    }
+
+    /* Grain sutil */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    /* ============================================================
+       GLASSMORPHISM CARD
+       ============================================================ */
+    .glass {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .glass:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Card premium (dourado) */
+    .glass-gold {
+      background: rgba(255,251,235,0.75);
+      border: 1px solid rgba(180,83,9,0.2);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      box-shadow: 0 8px 40px rgba(180,83,9,0.12);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .glass-gold:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(180,83,9,0.2);
+    }
+
+    /* ============================================================
+       TIPOGRAFIA
+       ============================================================ */
+    .t-display {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    .t-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    /* ============================================================
+       HERO
+       ============================================================ */
+    #hero {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 7rem 1.5rem 5rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 1.1rem;
+      border-radius: 100px;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.75rem;
+      opacity: 0;
+      animation: fadeDown 0.7s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5.5vw, 3.6rem);
+      font-weight: 700;
+      color: #0F172A;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      max-width: 780px;
+      margin: 0 auto 1.25rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.35s forwards;
+    }
+    .hero-title span { color: var(--accent); }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      color: #475569;
+      font-weight: 300;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.5s forwards;
+    }
+
+    /* Linha decorativa */
+    .hero-line {
+      width: 60px; height: 3px;
+      background: linear-gradient(90deg, var(--accent), #60A5FA);
+      border-radius: 2px;
+      margin: 2rem auto 0;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.65s forwards;
+    }
+
+    /* ============================================================
+       SEÇÃO PROBLEMA
+       ============================================================ */
+    .problem-card {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 2.5rem 2.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .problem-card::before {
+      content: '"';
+      position: absolute;
+      top: -0.5rem;
+      left: 1.5rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 8rem;
+      color: var(--accent);
+      opacity: 0.08;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       CARDS DE SERVIÇO
+       ============================================================ */
+    .price-tag {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      color: #374151;
+      line-height: 1.55;
+    }
+    .check-icon {
+      flex-shrink: 0;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .check-icon.blue { background: var(--accent-light); color: var(--accent); }
+    .check-icon.gold { background: var(--gold-light); color: var(--gold); }
+
+    /* Badge "Recomendado" */
+    .badge-rec {
+      position: absolute;
+      top: -1px; right: 24px;
+      background: linear-gradient(135deg, #B45309, #D97706);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 4px 12px rgba(180,83,9,0.35);
+    }
+
+    /* ============================================================
+       CARD GESTÃO MENSAL
+       ============================================================ */
+    .monthly-card {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 2.75rem;
+      background: linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(96,165,250,0.06) 100%);
+      border: 1px solid rgba(37,99,235,0.2);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      box-shadow: 0 8px 40px rgba(37,99,235,0.1);
+    }
+
+    /* ============================================================
+       BOX DE ALERTA / TRANSPARÊNCIA
+       ============================================================ */
+    .alert-box {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem 2.25rem;
+      background: rgba(255,251,235,0.8);
+      border: 1px solid rgba(180,83,9,0.25);
+      border-left: 4px solid #D97706;
+      border-radius: 12px;
+      backdrop-filter: blur(12px);
+    }
+
+    /* ============================================================
+       BOTÃO CTA
+       ============================================================ */
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1.1rem 2.5rem;
+      background: linear-gradient(135deg, #1D4ED8, #2563EB);
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      border-radius: 100px;
+      text-decoration: none;
+      box-shadow: 0 6px 24px rgba(37,99,235,0.35), 0 2px 6px rgba(37,99,235,0.2);
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      border-radius: inherit;
+    }
+    .cta-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 40px rgba(37,99,235,0.45), 0 4px 12px rgba(37,99,235,0.25);
+      background: linear-gradient(135deg, #1E40AF, #1D4ED8);
+    }
+    .cta-btn:active { transform: translateY(-1px) scale(0.99); }
+
+    /* Pulsação sutil */
+    .cta-btn .pulse-ring {
+      position: absolute;
+      inset: -4px;
+      border-radius: 100px;
+      border: 2px solid rgba(37,99,235,0.3);
+      animation: pulse-ring 2.5s ease-out infinite;
+      pointer-events: none;
+    }
+    @keyframes pulse-ring {
+      0%   { transform: scale(1);   opacity: 0.8; }
+      70%  { transform: scale(1.06); opacity: 0; }
+      100% { transform: scale(1.06); opacity: 0; }
+    }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    footer {
+      text-align: center;
+      padding: 2.5rem 1.5rem 3.5rem;
+      position: relative; z-index: 1;
+    }
+
+    /* ============================================================
+       REVEAL ON SCROLL
+       ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ============================================================
+       ANIMAÇÕES
+       ============================================================ */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Scroll suave para mobile */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================================
+       HERO SECTION
+       Altere: título, subtítulo conforme necessário
+       ============================================================ -->
+  <section id="hero">
+    <!-- Badge superior -->
+    <div class="hero-badge">
+      <!-- Ícone de documento -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/>
+      </svg>
+      Proposta Exclusiva · 2025
+    </div>
+
+    <!-- TÍTULO PRINCIPAL — edite aqui -->
+    <h1 class="hero-title">
+      Proposta de <span>Modernização Digital</span>:<br>Home Projetos
+    </h1>
+
+    <!-- SUBTÍTULO — edite aqui -->
+    <p class="hero-sub">
+      Elevando sua vitrine ao nível das suas obras.
+    </p>
+
+    <div class="hero-line"></div>
+  </section>
+
+
+  <!-- ============================================================
+       SEÇÃO 1 — O PROBLEMA
+       Edite o texto conforme sua narrativa comercial
+       ============================================================ -->
+  <section class="relative z-10 px-5 pb-16">
+
+    <div class="problem-card glass reveal">
+      <!-- Label -->
+      <p class="t-label mb-4" style="color: var(--accent);">O contexto</p>
+
+      <!-- TEXTO DO PROBLEMA — edite aqui -->
+      <p style="font-size:1.05rem; color:#1E293B; line-height:1.85; font-weight:300;">
+        Sua empresa entrega casas incríveis — projetos que materializam o sonho de famílias inteiras.
+        Mas <strong style="font-weight:600; color:#0F172A;">a vitrine digital atual não reflete essa excelência.</strong>
+        Em um mercado cada vez mais visual e competitivo, um site desatualizado afasta potenciais clientes
+        antes mesmo de você ter a chance de impressioná-los.
+      </p>
+
+      <p style="font-size:1.05rem; color:#1E293B; line-height:1.85; font-weight:300; margin-top:1.2rem;">
+        O objetivo aqui é direto:
+        <strong style="font-weight:600; color:#0F172A;">converter visitantes em clientes</strong>
+        através de uma experiência visual superior — digna das obras que você assina.
+      </p>
+    </div>
+
+  </section>
+
+
+  <!-- ============================================================
+       SEÇÃO 2 — COMPARATIVO DE SERVIÇOS
+       Edite: preços, features e textos de cada modelo
+       ============================================================ -->
+  <section class="relative z-10 px-5 pb-16">
+
+    <!-- Cabeçalho da seção -->
+    <div class="text-center mb-10 reveal">
+      <p class="t-label mb-3" style="color: var(--accent);">O que está na mesa</p>
+      <h2 class="t-display" style="font-size:clamp(1.6rem,3.5vw,2.4rem); color:#0F172A;">Escolha o modelo ideal</h2>
+    </div>
+
+    <!-- Grid de cards -->
+    <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- ─── CARD 1: LANDING PAGE ─────────────────────────── -->
+      <!-- Altere: nome, preço e lista de features -->
+      <div class="glass p-8 reveal" style="position:relative;">
+        <p class="t-label mb-2" style="color:#64748B;">Modelo 01</p>
+        <h3 class="t-display mb-1" style="font-size:1.55rem; color:#0F172A;">Landing Page</h3>
+        <p style="font-size:0.85rem; color:#64748B; margin-bottom:1.75rem;">Ideal para começar com o pé direito</p>
+
+        <!-- PREÇO — altere aqui -->
+        <div class="flex items-baseline gap-2 mb-6">
+          <span style="font-size:0.85rem; color:#64748B; margin-top:0.5rem;">R$</span>
+          <span class="price-tag" style="color: var(--accent);">500</span>
+          <span style="font-size:0.85rem; color:#64748B;">,00</span>
+        </div>
+
+        <div style="height:1px; background:rgba(37,99,235,0.12); margin-bottom:1.5rem;"></div>
+
+        <!-- LISTA DE FEATURES — adicione ou remova itens -->
+        <ul style="display:flex; flex-direction:column; gap:0.85rem; list-style:none;">
+          <li class="check-item">
+            <span class="check-icon blue">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+            Design moderno e sofisticado
+          </li>
+          <li class="check-item">
+            <span class="check-icon blue">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+            Mobile-First — 100% responsivo
+          </li>
+          <li class="check-item">
+            <span class="check-icon blue">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+            Botão de conversão via WhatsApp
+          </li>
+          <li class="check-item">
+            <span class="check-icon blue">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+            Copywriting focado em conversão
+          </li>
+          <li class="check-item">
+            <span class="check-icon blue">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+            Otimização básica de SEO
+          </li>
+        </ul>
+      </div>
+      <!-- ─── FIM CARD 1 ─────────────────────────────────── -->
+
+
+      <!-- ─── CARD 2: PORTFÓLIO PREMIUM ────────────────────── -->
+      <!-- Altere: nome, preço e lista de features -->
+      <div class="glass-gold p-8 reveal" style="position:relative;">
+        <!-- Badge "Recomendado" -->
+        <span class="badge-rec">★ Recomendado</span>
+
+        <p class="t-label mb-2" style="color:#92400E;">Modelo 02</p>
+        <h3 class="t-display mb-1" style="font-size:1.55rem; color:#0F172A;">Portfólio Premium</h3>
+        <p style="font-size:0.85rem; color:#92400E; margin-bottom:1.75rem;">A experiência completa de marca</p>
+
+        <!-- PREÇO — altere aqui -->
+        <div class="flex items-baseline gap-2 mb-6">
+          <span style="font-size:0.85rem; color:#92400E; margin-top:0.5rem;">R$</span>
+          <span class="price-tag" style="color: var(--gold);">850</span>
+          <span style="font-size:0.85rem; color:#92400E;">,00</span>
+        </div>
+
+        <div style="height:1px; background:rgba(180,83,9,0.15); margin-bottom:1.5rem;"></div>
+
+        <!-- LISTA — tudo do Modelo 1 + extras -->
+        <ul style="display:flex; flex-direction:column; gap:0.85rem; list-style:none;">
+          <li class="check-item" style="color:#92400E; font-weight:500; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.08em;">
+            ✦ Tudo do Modelo 01, mais:
+          </li>
+          <li class="check-item">
+            <span class="check-icon gold">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+            Galeria interativa de projetos
+          </li>
+          <li class="check-item">
+            <span class="check-icon gold">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+            Linha do Tempo do processo construtivo
+          </li>
+          <li class="check-item">
+            <span class="check-icon gold">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+            Seção de depoimentos de autoridade
+          </li>
+          <li class="check-item">
+            <span class="check-icon gold">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+            Animações e microinterações premium
+          </li>
+          <li class="check-item">
+            <span class="check-icon gold">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+            SEO avançado + meta tags sociais
+          </li>
+        </ul>
+      </div>
+      <!-- ─── FIM CARD 2 ─────────────────────────────────── -->
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SEÇÃO 3 — GESTÃO TÉCNICA MENSAL
+       Edite: preço e lista de benefícios
+       ============================================================ -->
+  <section class="relative z-10 px-5 pb-16">
+
+    <div class="monthly-card reveal">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+
+        <div>
+          <p class="t-label mb-2" style="color: var(--accent);">Recorrente · Opcional mas recomendado</p>
+          <h3 class="t-display mb-2" style="font-size:1.55rem; color:#0F172A;">Administração &amp; Segurança</h3>
+          <p style="font-size:0.9rem; color:#475569; line-height:1.65; max-width:440px;">
+            Para que você <strong style="color:#0F172A;">nunca precise se preocupar</strong> com o lado técnico.
+            Cuido de tudo nos bastidores, enquanto você foca no que faz de melhor.
+          </p>
+        </div>
+
+        <!-- PREÇO MENSAL — altere aqui -->
+        <div class="flex-shrink-0 text-center md:text-right">
+          <div class="flex items-baseline justify-center md:justify-end gap-1">
+            <span style="font-size:0.85rem; color:#64748B;">R$</span>
+            <span class="price-tag" style="color: var(--accent); font-size:3rem;">100</span>
+            <span style="font-size:0.85rem; color:#64748B;">,00</span>
+          </div>
+          <span style="font-size:0.78rem; color:#94A3B8; letter-spacing:0.1em; text-transform:uppercase;">por mês</span>
+        </div>
+
+      </div>
+
+      <!-- Divisória -->
+      <div style="height:1px; background:rgba(37,99,235,0.12); margin:1.75rem 0;"></div>
+
+      <!-- LISTA DE BENEFÍCIOS — edite conforme necessário -->
+      <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3" style="list-style:none;">
+        <li class="check-item">
+          <span class="check-icon blue">
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </span>
+          Backups automáticos e seguros
+        </li>
+        <li class="check-item">
+          <span class="check-icon blue">
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </span>
+          Monitoramento de estabilidade
+        </li>
+        <li class="check-item">
+          <span class="check-icon blue">
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </span>
+          Atualização de novos projetos
+        </li>
+        <li class="check-item">
+          <span class="check-icon blue">
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </span>
+          Suporte técnico prioritário
+        </li>
+      </ul>
+    </div>
+
+  </section>
+
+
+  <!-- ============================================================
+       SEÇÃO 4 — TRANSPARÊNCIA / NOTA IMPORTANTE
+       Edite o texto conforme necessário
+       ============================================================ -->
+  <section class="relative z-10 px-5 pb-16">
+
+    <div class="alert-box reveal">
+      <div class="flex items-start gap-3">
+        <!-- Ícone de alerta -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px;">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <div>
+          <p class="t-label mb-2" style="color: #92400E;">Nota Importante — Transparência total</p>
+          <!-- TEXTO DA NOTA — edite aqui -->
+          <p style="font-size:0.92rem; color:#78350F; line-height:1.75;">
+            Esta proposta cobre apenas o <strong>desenvolvimento e design</strong> do seu novo site.
+            A hospedagem e o domínio são ativos que <strong>já pertencem à Home Projetos</strong>
+            e o custo dos mesmos continua sendo de responsabilidade da empresa junto ao provedor atual.
+          </p>
+          <p style="font-size:0.92rem; color:#78350F; line-height:1.75; margin-top:0.75rem;">
+            Eu assumo apenas a <strong>gestão técnica do que já existe</strong> — sem taxas ocultas,
+            sem surpresas. O que você vê acima é exatamente o que você paga.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ============================================================
+       SEÇÃO 5 — CALL TO ACTION
+       ⚠ ALTERE o link do WhatsApp abaixo (no JS e no href)
+       ============================================================ -->
+  <section class="relative z-10 px-5 pb-20 text-center reveal">
+
+    <!-- Título CTA -->
+    <p class="t-label mb-4" style="color: var(--accent);">Próximo passo</p>
+    <h2 class="t-display mb-3" style="font-size:clamp(1.5rem,3.5vw,2.2rem); color:#0F172A;">
+      Pronta para transformar<br>sua presença digital?
+    </h2>
+    <p style="font-size:0.95rem; color:#64748B; margin-bottom:2.5rem; max-width:420px; margin-left:auto; margin-right:auto; line-height:1.7;">
+      Clique abaixo e vamos conversar. Sem compromisso, sem complicação — só resultados.
+    </p>
+
+    <!-- =========================================================
+         BOTÃO WHATSAPP
+         ⚠ Altere o número em: WHATSAPP_NUMBER (no JS abaixo)
+         ========================================================= -->
+    <a href="#" id="cta-whatsapp" class="cta-btn" target="_blank" rel="noopener">
+      <span class="pulse-ring"></span>
+      <!-- Ícone WhatsApp -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.122 1.532 5.857L.057 23.527a.5.5 0 00.602.645l5.879-1.44A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.723 9.723 0 01-5.013-1.388l-.36-.213-3.73.913.946-3.619-.233-.373A9.718 9.718 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/>
+      </svg>
+      Quero modernizar meu site agora
+      <!-- Seta -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </a>
+
+    <!-- Nota de rodapé do CTA -->
+    <p style="font-size:0.75rem; color:#94A3B8; margin-top:1.25rem;">
+      Resposta em até 2 horas · Sem compromisso
+    </p>
+
+  </section>
+
+
+  <!-- ============================================================
+       FOOTER
+       Edite: seu nome/marca e link do site
+       ============================================================ -->
+  <footer>
+    <div style="height:1px; background:rgba(37,99,235,0.1); max-width:400px; margin:0 auto 2rem;"></div>
+
+    <!-- EDITE: seu nome de freelancer/empresa -->
+    <p style="font-family:'Playfair Display',serif; font-size:1rem; color:#0F172A; font-weight:500; margin-bottom:0.4rem;">
+      Proposta elaborada com cuidado.
+    </p>
+    <p style="font-size:0.78rem; color:#94A3B8; letter-spacing:0.05em;">
+      Válida por 15 dias · Confidencial · Uso exclusivo: Home Projetos
+    </p>
+  </footer>
+
+
+  <!-- ============================================================
+       JAVASCRIPT
+       ============================================================
+
+       ⚠ CONFIGURAÇÕES EDITÁVEIS:
+       ─ WHATSAPP_NUMBER  : DDI + DDD + número (sem espaços)
+       ─ WHATSAPP_MESSAGE : mensagem pré-preenchida
+       ============================================================ -->
+  <script>
+    /* ---- WHATSAPP -------------------------------------------- */
+    const WHATSAPP_NUMBER  = '5541999990000'; // ← ALTERE para o seu número
+    const WHATSAPP_MESSAGE = encodeURIComponent(
+      'Olá! Vi a proposta e tenho interesse em modernizar o site da Home Projetos. Podemos conversar? 😊'
+    );
+    document.getElementById('cta-whatsapp').href =
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE}`;
+
+
+    /* ---- REVEAL ON SCROLL ------------------------------------ */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
